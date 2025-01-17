@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: backend
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+  datasource:
+    url: jdbc:mysql://localhost:3306/task-tracker
+    username: root
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  flyway:
+    enabled: true
+
+jwt:
+  secret: 49ee93ddd9ebb0bb6c249af667b3d7980774a9e95920c7cf94217fa20d19398b80a94672be96820ba38af1e6c90909042b4744c0486d9020f4cec6f2817ae975
+
+logging:
+  level:
+    org:
+      springframework:
+        web:
+          cors=DEBUG:

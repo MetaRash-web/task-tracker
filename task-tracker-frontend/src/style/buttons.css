@@ -1,0 +1,165 @@
+.container-eg-btn-4 {
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    flex-wrap: wrap;
+    margin: 0 auto 10px;
+    padding: .5em;
+    line-height: normal;
+}
+.container-eg-btn-4 .button {
+    margin: 15px;
+    padding: 18px 22px;
+    text-align: center;
+    text-transform: uppercase;
+    position: relative;
+    transition: .3s;
+    z-index: 1;
+    cursor: pointer;
+    border-radius: 12px;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    font-weight: 700;
+    border: 1px solid transparent; /* убрали цвет по умолчанию */
+}
+
+/* Кнопки в светлой теме */
+.container-eg-btn-4 .button.light-theme {
+    background-color: #af40ff; /* светлый фон для кнопки */
+    color: #fff; /* белый текст */
+}
+
+.container-eg-btn-4 .button .dark-theme {
+    background-color: #595959;
+    color: #fff;
+    border: 1px solid #555;
+}
+
+.container-eg-btn-4 .button-3 .light-theme {
+    background-image: linear-gradient(to right, #1FA2FF 0%, #12D8FA 51%, #1FA2FF 100%);
+    background-size: 200% auto;
+}
+
+.container-eg-btn-4 .button-3.dark-theme {
+    background-image: linear-gradient(to right, #1A73E8 0%, #76C8F3 51%, #1A73E8 100%);
+    background-size: 200% auto;
+}
+
+.container-eg-btn-4 .button-3:hover {
+    background-position: right center;
+    box-shadow: 0 4px 15px 0 #12d8fa;
+}
+
+.container-eg-btn-4 .button-3.dark-theme:hover {
+    box-shadow: 0 4px 15px 0 #76c8f3;
+}
+
+
+/* Change theme button */
+.theme-toggle {
+    margin-top: auto;
+    -webkit-appearance: none;
+    outline: none;
+    cursor: pointer;
+    height: var(--theme-toggle-height);
+    width: var(--theme-toggle-width);
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    border: 1px solid #ddd;
+    position: relative;
+    border-radius: var(--theme-toggle-circle-dimensions);
+    padding: 0.2rem;
+    background-color: #fff;
+    transition: background-color 0.5s;
+
+    &:before {
+        content: "";
+        width: var(--theme-toggle-circle-dimensions);
+        height: var(--theme-toggle-circle-dimensions);
+        background-color: #007bff;
+        position: absolute;
+        border-radius: 50%;
+        top: 50%;
+        transform: translateY(-50%) translateX(-50%);
+        transition: transform 0.5s;
+    }
+
+    &:after {
+        content: "";
+        white-space: nowrap;
+        color: #111;
+        position: absolute;
+        left: calc(100% + 1.5rem);
+        font-size: 1.3rem;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+    }
+}
+
+.theme-toggle:checked {
+    background-color: #007bff;
+    border: none;
+
+    &:before {
+        background-color: #fff;
+        transform: translateY(-50%)
+        translateX(50%);
+    }
+
+    &:after {
+        content: "";
+        color: #fff;
+    }
+}
+
+.modal {
+    display: none; /* Скрыто по умолчанию */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); /* Полупрозрачный фон */
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+}
+
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Стили для формы */
+form div {
+    margin-bottom: 15px;
+}
+
+form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+form input, form textarea {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}

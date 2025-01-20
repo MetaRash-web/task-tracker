@@ -48,11 +48,14 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("Listener added for logout button");
 
         document.getElementById('add-task-button')
-            .addEventListener('click', () => openTaskModal);
+            .addEventListener('click', () => openTaskModal());
         console.log("Listener added for add task button");
+
+        document.getElementById('show-tasks')
+            .addEventListener('click', loadTasks)
     }
 
-    async function handleSignup() {
+    async function handleSignup(event) {
         event.preventDefault();
         const formData = new FormData(event.target);
         try {
@@ -68,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    async function handleLogin() {
+    async function handleLogin(event) {
         event.preventDefault();
         const formData = new FormData(event.target);
         try {
@@ -76,26 +79,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: 'POST',
                 body: JSON.stringify(Object.fromEntries(formData)),
                 headers: { 'Content-Type': 'application/json' }
-            }).then(response => response.text())  // Прочитаем ответ как текст
-                .then(data => {
-                    console.log(data);  // Логируем ответ
-                    try {
-                        const jsonData = JSON.parse(data);
-                        console.log(jsonData);  // Дальше работаем с JSON
-                    } catch (e) {
-                        console.error('Ошибка парсинга JSON:', e);
-                    }
-                })
-                .catch(error => console.error('Ошибка запроса:', error));
-            const result = await response.json();
+            })
+            const text = await response.text();
+            console.log('Response Text:', text);
+
+            const result = JSON.parse(text);
 
             console.log("result: " + result)
 
             if (response.ok) {
-                localStorage.setItem("accessToken", result.token);
+                localStorage.setItem("accessToken", result.token); // access token
                 localStorage.setItem("refreshToken", result.refreshToken);  // refresh token
                 localStorage.setItem("userData", JSON.stringify(result.user));
-                state.token = result.token;  // Записываем access token в state
+                state.token = result.token;
                 console.log("result token: " + result.token, "| refresh token: " + result.refreshToken);
                 await loadTasks();
                 updateUIAfterLogin(result.user);
@@ -169,7 +165,9 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Response text: ", responseText);
 
             if (!response.ok) {
-                const errorData = JSON.parse(responseText);
+                const errorData = response.headers.get('Content-Type').includes('application/json')
+                    ? await response.json()
+                    : { message: 'Не удалось загрузить задачи' };
                 throw new Error(errorData.message || 'Не удалось загрузить задачи');
             }
 

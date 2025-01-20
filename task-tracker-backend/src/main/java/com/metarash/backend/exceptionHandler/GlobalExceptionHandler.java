@@ -11,15 +11,15 @@ import javax.naming.AuthenticationException;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(AuthenticationException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ResponseEntity<String> handleException(AuthenticationException ex) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authentication failed " + ex.getMessage());
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<String> handleRuntimeException(RuntimeException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized access: " + ex.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<String> handleGenericException(Exception ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred" + ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + ex.getMessage());
     }
 }

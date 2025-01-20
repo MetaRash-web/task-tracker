@@ -7,18 +7,18 @@ import com.metarash.backend.mapper.UserMapper;
 import com.metarash.backend.repository.UserRepository;
 import com.metarash.backend.security.jwt.JwtService;
 import com.metarash.backend.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.naming.AuthenticationException;
 import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final UserRepository userRepository;
@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public JwtAuthenticationDto signIn(UserCredentialsDto userCredentialsDto) throws AuthenticationException {
+    public JwtAuthenticationDto signIn(UserCredentialsDto userCredentialsDto) {
         User user = findByCredentials(userCredentialsDto);
         return jwtService.generateAuthToken(user.getEmail());
     }
@@ -55,21 +55,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
-    public UserDto getUserDtoByEmail(String email) throws ChangeSetPersister.NotFoundException {
-        return userMapper.toDto(userRepository.findByEmail(email).orElseThrow(ChangeSetPersister.NotFoundException::new));
+    public UserDto getUserDtoByEmail(String email) throws EntityNotFoundException {
+        return userMapper.toDto(userRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("User not found")));
     }
 
     @Override
-    @Transactional
-    public UserDto getUserDtoByUsername(String username) throws ChangeSetPersister.NotFoundException {
-        return userMapper.toDto(userRepository.findByUsername(username).orElseThrow(ChangeSetPersister.NotFoundException::new));
+    public UserDto getUserDtoByUsername(String username) throws EntityNotFoundException {
+        return userMapper.toDto(userRepository.findByUsername(username).orElseThrow(() -> new EntityNotFoundException("User not found")));
     }
 
     @Override
-    @Transactional
-    public UserDto getUserDtoById(Long id) throws ChangeSetPersister.NotFoundException {
-        return userMapper.toDto(userRepository.findById(id).orElseThrow(ChangeSetPersister.NotFoundException::new));
+    public UserDto getUserDtoById(Long id) throws EntityNotFoundException {
+        return userMapper.toDto(userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found")));
     }
 
     @Override

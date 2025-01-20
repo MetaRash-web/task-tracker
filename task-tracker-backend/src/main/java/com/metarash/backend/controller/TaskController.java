@@ -21,9 +21,7 @@ public class TaskController {
 
     @GetMapping
     public ResponseEntity<?> getTasks(Authentication authentication) {
-        System.out.println("get tasks method started");
         if (authentication == null || !authentication.isAuthenticated()) {
-            System.out.println("some error with authentication");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Collections.singletonMap("message", "Unauthorized"));
         }
@@ -31,12 +29,13 @@ public class TaskController {
 
         String username = authentication.getName();
         try {
+            System.out.println("getting tasks rn");
             List<TaskDto> tasks = taskService.getTasksByUsername(username);
             return ResponseEntity.ok(tasks);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Collections.singletonMap("message", "Failed to retrieve tasks"));
+                    .body(Collections.singletonMap("message", "Failed to retrieve tasks " + e.getMessage()));
         }
     }
 
@@ -46,17 +45,19 @@ public class TaskController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Collections.singletonMap("message", "Unauthorized"));
         }
+        System.out.println("auth in create task method: " + authentication);
 
         String username = authentication.getName();
         taskDto.setUsername(username);
 
         try {
             taskService.saveTask(taskDto);
+            System.out.println("task saved: " + taskDto);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(Collections.singletonMap("message", "Task created successfully"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Collections.singletonMap("message", "Failed to create task"));
+                    .body(Collections.singletonMap("message", "Failed to create task " + e));
         }
     }
 }

@@ -2,28 +2,30 @@ package com.metarash.backend;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.metarash.backend.dto.TaskDto;
 import com.metarash.backend.dto.UserCredentialsDto;
-import com.metarash.backend.dto.UserDto;
+import com.metarash.backend.model.TaskStatus;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+
+import java.time.ZonedDateTime;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class BackendApplicationTests {
+public class TaskControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -31,48 +33,41 @@ class BackendApplicationTests {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Test
-    public void testRegisterUser() throws Exception {
-        // Данные для регистрации пользователя
-        UserDto userDto = new UserDto();
-        userDto.setEmail("lnebylovskij@bk.ru");
-        userDto.setPassword("12345");
-        userDto.setUsername("metarash");
-
-        // Регистрируем пользователя
-        mockMvc.perform(post("/user")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(userDto)))
-                .andExpect(status().isOk()) // Убедимся, что статус 200 - cool
-                .andExpect(jsonPath("$.email").value("lnebylovskij@bk.ru"))
-                .andExpect(jsonPath("$.username").value("metarash"));
+    @BeforeEach
+    public void setUp() {
+        objectMapper.registerModule(new JavaTimeModule());
     }
 
     @Test
-    public void testLoginAndGetUser() throws Exception {
-        // Данные для авторизации
+    public void testCreateTask() throws Exception {
         UserCredentialsDto userCredentialsDto = new UserCredentialsDto();
         userCredentialsDto.setEmail("lnebylovskij@bk.ru");
         userCredentialsDto.setPassword("12345");
 
-        // Авторизуемся и получаем JWT токен
         MvcResult loginResult = mockMvc.perform(post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userCredentialsDto)))
-                .andExpect(status().isOk()) // Ожидаем статус 200 OK
+                .andExpect(status().isOk())
                 .andReturn();
 
-        // Извлекаем JWT токен из ответа
+        ZonedDateTime time = ZonedDateTime.now();
+
         String responseBody = loginResult.getResponse().getContentAsString();
         Map<String, Object> responseMap = objectMapper.readValue(responseBody, new TypeReference<>() {});
         String jwtToken = (String) responseMap.get("token");
 
-        assertNotNull(jwtToken);
+        TaskDto taskDto = new TaskDto();
+        taskDto.setTitle("Test Task");
+        taskDto.setDescription("This is a test task");
+        taskDto.setStatus(TaskStatus.PENDING);
+        taskDto.setUsername("metarash");
 
-        mockMvc.perform(get("/user")
+        // Выполнение запроса
+        mockMvc.perform(post("/tasks")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(taskDto))
                         .header("Authorization", "Bearer " + jwtToken))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value("lnebylovskij@bk.ru"))
-                .andExpect(jsonPath("$.username").value("metarash"));
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.message").value("Task created successfully"));
     }
 }

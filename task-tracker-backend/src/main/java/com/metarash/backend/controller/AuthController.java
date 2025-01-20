@@ -5,6 +5,7 @@ import com.metarash.backend.dto.RefreshTokenDto;
 import com.metarash.backend.dto.UserCredentialsDto;
 import com.metarash.backend.dto.UserDto;
 import com.metarash.backend.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,6 @@ public class AuthController {
     public ResponseEntity<?> signIn(@RequestBody UserCredentialsDto userCredentialsDto) {
         try {
             JwtAuthenticationDto jwtAuthenticationDto = userService.signIn(userCredentialsDto);
-            System.out.println("jwtAuthenticationDto: " + jwtAuthenticationDto);
             UserDto userDto = userService.getUserDtoByEmail(userCredentialsDto.getEmail());
 
             Map<String, Object> response = new HashMap<>();
@@ -38,7 +38,7 @@ public class AuthController {
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("error", "Authentication failed", "message", e.getMessage()));
-        } catch (ChangeSetPersister.NotFoundException e) {
+        } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("error", "User not found", "message", e.getMessage()));
         }

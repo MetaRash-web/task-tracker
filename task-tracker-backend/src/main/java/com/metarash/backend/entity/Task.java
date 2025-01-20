@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -25,17 +27,22 @@ public class Task {
     @Column
     private String description;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private TaskStatus status;
 
-    @Column
+    @Column(name = "created_at", nullable = false, updatable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @Column(name = "due_date")
     private LocalDateTime dueDate;
+
+    @Column(name = "completed_at")
+    private LocalDateTime completedAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user; // Связь с пользователем
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private TaskStatus status = TaskStatus.PENDING; // default status
+    @ToString.Exclude
+    private User user;
 }

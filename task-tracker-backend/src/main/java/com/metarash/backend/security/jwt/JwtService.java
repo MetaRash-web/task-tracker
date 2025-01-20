@@ -21,6 +21,8 @@ public class JwtService {
     @Value("${jwt.secret}")
     private String jwtSecret;
 
+    private final static int DURATION_OF_TOKEN = 5;
+
     private static final Logger LOGGER = LogManager.getLogger(JwtService.class);
 
     private SecretKey secretKey;
@@ -44,7 +46,7 @@ public class JwtService {
     }
 
     public String generateJwtToken(String email) {
-        return generateToken(email, Duration.ofMinutes(1));
+        return generateToken(email, Duration.ofMinutes(DURATION_OF_TOKEN));
     }
 
     public String generateRefreshToken(String email) {

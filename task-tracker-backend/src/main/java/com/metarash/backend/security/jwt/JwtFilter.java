@@ -28,9 +28,7 @@ public class JwtFilter extends OncePerRequestFilter {
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
         String token = getTokenFromRequest(request);
-        System.out.println("| token: " + token + " |");
         if (token != null && jwtService.validateJwtToken(token)) {
-            System.out.println("token not null and validated");
             setCustomUserDetailsToSecurityContextHolder(token);
         }
         filterChain.doFilter(request, response);
@@ -38,17 +36,13 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private void setCustomUserDetailsToSecurityContextHolder(String token) {
         String email = jwtService.getEmailFromToken(token);
-        System.out.println("email from token: " + email);
         try {
             CustomUserDetails customUserDetails = customUserService.loadUserByUsername(email);
-            System.out.println("founded user and created dto: " + customUserDetails);
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                     customUserDetails, null, customUserDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-            System.out.println("setting authentication in security context holder");
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Exception occurred while loading user: " + e.getMessage());
         }
     }
 

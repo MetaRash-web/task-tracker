@@ -17,20 +17,14 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
+@Transactional
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
-    private final UserRepository userRepository;
     private final TaskMapper taskMapper;
 
     @Override
-    @Transactional
     public List<TaskDto> getTasksByUsername(String username) {
-
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        System.out.println("user: " + user);
-
-        List<Task> tasks = taskRepository.findByUserId(user.getId());
+        List<Task> tasks = taskRepository.findTasksByUsername(username);
         System.out.println("tasks: " + tasks);
 
         return tasks.stream()

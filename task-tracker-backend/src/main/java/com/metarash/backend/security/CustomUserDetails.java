@@ -1,14 +1,12 @@
 package com.metarash.backend.security;
 
-
-import com.metarash.backend.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
 
-public record CustomUserDetails(User user) implements UserDetails {
+public record CustomUserDetails(String username, String password) implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -17,11 +15,11 @@ public record CustomUserDetails(User user) implements UserDetails {
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return username;
     }
 }

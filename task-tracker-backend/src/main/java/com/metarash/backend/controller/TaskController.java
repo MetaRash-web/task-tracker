@@ -25,11 +25,9 @@ public class TaskController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Collections.singletonMap("message", "Unauthorized"));
         }
-        System.out.println("auth: " + authentication);
 
         String username = authentication.getName();
         try {
-            System.out.println("getting tasks rn");
             List<TaskDto> tasks = taskService.getTasksByUsername(username);
             return ResponseEntity.ok(tasks);
         } catch (Exception e) {
@@ -52,7 +50,6 @@ public class TaskController {
 
         try {
             taskService.saveTask(taskDto);
-            System.out.println("task saved: " + taskDto);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(Collections.singletonMap("message", "Task created successfully"));
         } catch (Exception e) {

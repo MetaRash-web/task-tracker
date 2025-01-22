@@ -16,8 +16,6 @@ public class TaskDto {
     private String title;
     private String description;
     private LocalDateTime createdAt;
-    
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dueDate;
     private TaskStatus status;
     private String username;

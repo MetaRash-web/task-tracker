@@ -25,8 +25,6 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<TaskDto> getTasksByUsername(String username) {
         List<Task> tasks = taskRepository.findTasksByUsername(username);
-        System.out.println("tasks: " + tasks);
-
         return tasks.stream()
                 .map(taskMapper::toDto)
                 .collect(Collectors.toList());

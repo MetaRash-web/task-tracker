@@ -10,7 +10,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthenticationAspect {
 
-    @Before("execution(* com.metarash.backend.controller.TaskController.*(..))")
+    @Before("execution(* com.metarash.backend.controller.TaskController.*(..)) || " +
+            "execution(* com.metarash.backend.controller.UserController.getCurrentUser(..))")
     public void checkAuthentication() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {

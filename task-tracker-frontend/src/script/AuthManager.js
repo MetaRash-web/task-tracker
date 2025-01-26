@@ -35,10 +35,11 @@ export class AuthManager {
             const result = await response.json();
             if (response.ok) {
                 localStorage.setItem("accessToken", result.token);
+                console.log('access token: ', result.token)
                 localStorage.setItem("refreshToken", result.refreshToken);
                 localStorage.setItem("userData", JSON.stringify(result.user));
                 this.token = result.token;
-                UIManager.setUiUserContainer(result.user);
+                UIManager.setUi(result.user);
                 await TaskManager.loadTasks();
             } else {
                 console.error(`Ошибка: ${result.message}`);
@@ -55,7 +56,8 @@ export class AuthManager {
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("userData")
         TaskManager.clearTasks();
-        UIManager.setUiUserContainer(null);
+        UIManager.setUi(null);
+
         window.onreset;
     }
 }

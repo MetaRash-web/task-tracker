@@ -7,14 +7,23 @@ let currentTaskId = null;
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    UIManager.initializeUI();// Инициализация UI
-    UIManager.setUiUserContainer(JSON.parse(localStorage.getItem('userData')));
+    if (localStorage.getItem('accessToken')) {
+        UIManager.initializeUI();
+        UIManager.setUi(JSON.parse(localStorage.getItem('userData')));
+        TaskManager.renderTasks();
+    } else {
+        UIManager.setUi(null);
+    }
 
     // Инициализация событий
     document.getElementById('signup-form').addEventListener('submit', (event) => new AuthManager().handleSignup(event));
     document.getElementById('login-form').addEventListener('submit', (event) => new AuthManager().handleLogin(event));
     document.getElementById('logout-button').addEventListener('click', () => new AuthManager().handleLogout());
     document.getElementById('avatar').addEventListener('click', () => ModalManager.toggleModal('user-container'))
+    document.getElementById('close-edit-button').addEventListener('click', () => ModalManager.toggleModal('editModal'))
+    document.getElementById('edit-button').addEventListener('click', (event) => new TaskManager().updateTask(event))
+    document.getElementById('delete-confirm-button').addEventListener('click', (event) => new TaskManager().deleteTask(event))
+    document.getElementById('delete-cancel-button').addEventListener('click', () => ModalManager.toggleModal('deleteModal'));
 
     // Подключаем события для работы с задачами
     document.getElementById('add-task-button').addEventListener('click', () => ModalManager.toggleModal('taskModal'));

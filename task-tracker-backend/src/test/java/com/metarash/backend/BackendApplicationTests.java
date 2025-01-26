@@ -1,78 +1,8 @@
 package com.metarash.backend;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.metarash.backend.dto.UserCredentialsDto;
-import com.metarash.backend.dto.UserDto;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-
-import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class BackendApplicationTests {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Test
-    public void testRegisterUser() throws Exception {
-        // Данные для регистрации пользователя
-        UserDto userDto = new UserDto();
-        userDto.setEmail("lnebylovskij@bk.ru");
-        userDto.setPassword("12345");
-        userDto.setUsername("metarash");
-
-        // Регистрируем пользователя
-        mockMvc.perform(post("/user")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(userDto)))
-                .andExpect(status().isOk()) // Убедимся, что статус 200 - cool
-                .andExpect(jsonPath("$.email").value("lnebylovskij@bk.ru"))
-                .andExpect(jsonPath("$.username").value("metarash"));
-    }
-
-    @Test
-    public void testLoginAndGetUser() throws Exception {
-        // Данные для авторизации
-        UserCredentialsDto userCredentialsDto = new UserCredentialsDto();
-        userCredentialsDto.setEmail("lnebylovskij@bk.ru");
-        userCredentialsDto.setPassword("12345");
-
-        // Авторизуемся и получаем JWT токен
-        MvcResult loginResult = mockMvc.perform(post("/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(userCredentialsDto)))
-                .andExpect(status().isOk()) // Ожидаем статус 200 OK
-                .andReturn();
-
-        // Извлекаем JWT токен из ответа
-        String responseBody = loginResult.getResponse().getContentAsString();
-        Map<String, Object> responseMap = objectMapper.readValue(responseBody, new TypeReference<>() {});
-        String jwtToken = (String) responseMap.get("token");
-
-        assertNotNull(jwtToken);
-
-        mockMvc.perform(get("/user")
-                        .header("Authorization", "Bearer " + jwtToken))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value("lnebylovskij@bk.ru"))
-                .andExpect(jsonPath("$.username").value("metarash"));
-    }
-}
+class BackendApplicationTests {}

@@ -4,12 +4,12 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
   datasource:
-    url: jdbc:mysql://localhost:3306/task-tracker
+    url: jdbc:mysql://mysql:3306/task-tracker
     username: root
     password: password
     driver-class-name: com.mysql.cj.jdbc.Driver

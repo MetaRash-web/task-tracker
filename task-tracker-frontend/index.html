@@ -56,20 +56,45 @@
         <form id="taskForm">
           <input type="text" id="title" name="title" placeholder="Заголовок задачи" required />
           <textarea id="description" name="description" placeholder="Описание задачи"></textarea>
-          <input type="date" id="dueDate" name="dueDate" required />
+          <input type="datetime-local" id="dueDate" name="dueDate" required />
           <button type="submit">Создать</button>
         </form>
       </div>
     </div>
     <div id="editModal" class="modal">
       <div class="modal-content">
-        <h3>Изменить статус задачи</h3>
-        <div class="buttons">
-          <button class="status-btn" data-status="PENDING">В ожидании</button>
-          <button class="status-btn" data-status="IN_PROGRESS">В работе</button>
-          <button class="status-btn" data-status="COMPLETED">Готово</button>
+        <button class="close-btn" id="close-edit-button"></button>
+        <h3>Изменить задачу</h3>
+        <form id="edit-form">
+          <label for="edit-title">Заголовок:</label>
+          <input type="text" id="edit-title" required>
+
+          <label for="edit-description">Описание:</label>
+          <textarea id="edit-description" required></textarea>
+
+          <label for="edit-dueDate">Срок:</label>
+          <input type="datetime-local" id="edit-dueDate" required>
+
+          <div class="buttons">
+            <button class="status-btn" data-status="PENDING">В ожидании</button>
+            <button class="status-btn" data-status="IN_PROGRESS">В работе</button>
+            <button class="status-btn" data-status="COMPLETED">Готово</button>
+          </div>
+
+          <div class="buttons">
+            <button type="submit" id="edit-button">Сохранить изменения</button>
+          </div>
+        </form>
+
+        <!-- Модальное окно для удаления задачи -->
+        <div class="modal-content">
+          <h3>Удалить задачу?</h3>
+          <p>Вы уверены, что хотите удалить эту задачу? Это действие нельзя отменить.</p>
+          <div class="buttons">
+            <button id="delete-confirm-button" class="confirm-btn">Удалить</button>
+            <button id="delete-cancel-button" class="cancel-btn">Отмена</button>
+          </div>
         </div>
-        <button id="closeModal">Закрыть</button>
       </div>
     </div>
     <div class="tasks-wrapper">

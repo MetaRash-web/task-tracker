@@ -21,11 +21,6 @@ public class TaskController {
 
     @GetMapping
     public ResponseEntity<?> getTasks(Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Collections.singletonMap("message", "Unauthorized"));
-        }
-
         String username = authentication.getName();
         try {
             List<TaskDto> tasks = taskService.getTasksByUsername(username);
@@ -39,15 +34,8 @@ public class TaskController {
 
     @PostMapping
     public ResponseEntity<?> createTask(@RequestBody TaskDto taskDto, Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Collections.singletonMap("message", "Unauthorized"));
-        }
-        System.out.println("auth in create task method: " + authentication);
-
         String username = authentication.getName();
         taskDto.setUsername(username);
-
         try {
             taskService.saveTask(taskDto);
             return ResponseEntity.status(HttpStatus.CREATED)
@@ -55,6 +43,33 @@ public class TaskController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.singletonMap("message", "Failed to create task " + e));
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateTask(@RequestBody TaskDto taskDto, Authentication authentication) {
+        String username = authentication.getName();
+        taskDto.setUsername(username);
+        System.out.println("task dto: " + taskDto);
+        try {
+            taskService.updateTask(taskDto);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(Collections.singletonMap("message", "Task updated successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.singletonMap("message", "Error updating task " + e));
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteTask(@PathVariable Long id) {
+        try {
+            taskService.deleteTask(id);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(Collections.singletonMap("message", "Task deleted successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.singletonMap("message", "Error deleting task " + e));
         }
     }
 }

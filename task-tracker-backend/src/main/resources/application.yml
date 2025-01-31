@@ -15,9 +15,13 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   flyway:
     enabled: true
-
+  kafka:
+    bootstrap-servers: kafka:9092
 jwt:
   secret: 49ee93ddd9ebb0bb6c249af667b3d7980774a9e95920c7cf94217fa20d19398b80a94672be96820ba38af1e6c90909042b4744c0486d9020f4cec6f2817ae975
+
+environment:
+  KAFKA_BOOTSTRAP_SERVERS: "kafka:9092"
 
 logging:
   level:

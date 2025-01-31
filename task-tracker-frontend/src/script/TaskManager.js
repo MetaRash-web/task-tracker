@@ -1,5 +1,4 @@
 import { ModalManager } from "./ModalManager.js";
-import { AuthManager } from "./AuthManager.js";
 
 export class TaskManager {
     static tasks = [];

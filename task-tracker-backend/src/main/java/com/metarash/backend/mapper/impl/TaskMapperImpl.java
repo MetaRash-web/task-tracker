@@ -21,7 +21,6 @@ public class TaskMapperImpl implements TaskMapper {
 
     @Override
     public Task toEntity(TaskDto dto) {
-        // Создаём новый объект Task
         Task task = new Task();
 
         task.setId(dto.getId());

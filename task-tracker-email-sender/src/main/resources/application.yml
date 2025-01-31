@@ -1,0 +1,13 @@
+spring:
+  mail:
+    username: username
+    password: password
+    port: 587
+    host: smtp.mailjet.com
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.debug: true
+
+  kafka:
+    bootstrap-servers: kafka:9092

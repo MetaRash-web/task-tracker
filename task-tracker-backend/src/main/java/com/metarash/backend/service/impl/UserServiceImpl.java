@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public JwtAuthenticationDto refreshToken(RefreshTokenDto refreshTokenDto) throws Exception {
+    public JwtAuthenticationDto refreshToken(RefreshTokenDto refreshTokenDto) {
         String refreshToken = refreshTokenDto.getRefreshToken();
         if(refreshToken != null && jwtService.validateJwtToken(refreshToken)) {
             User user = findByEmail(jwtService.getEmailFromToken(refreshToken));
@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService {
         throw new AuthenticationServiceException("Invalid email or password");
     }
 
-    private User findByEmail(String email) throws Exception {
-        return userRepository.findByEmail(email).orElseThrow(() -> new Exception(String.format("User with email %s not found", email)));
+    private User findByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
     }
 }

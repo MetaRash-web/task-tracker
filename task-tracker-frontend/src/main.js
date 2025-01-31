@@ -2,6 +2,7 @@ import { UIManager } from './script/UIManager.js';
 import {AuthManager} from "./script/AuthManager.js";
 import {ModalManager} from "./script/ModalManager.js";
 import {TaskManager} from "./script/TaskManager.js";
+import {EmailSenderManager} from "./script/EmailSenderManager.js";
 
 let currentTaskId = null;
 
@@ -24,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('edit-button').addEventListener('click', (event) => new TaskManager().updateTask(event))
     document.getElementById('delete-confirm-button').addEventListener('click', (event) => new TaskManager().deleteTask(event))
     document.getElementById('delete-cancel-button').addEventListener('click', () => ModalManager.toggleModal('deleteModal'));
+    document.getElementById('send-email').addEventListener('click', (event) => new EmailSenderManager().sendEmail(event))
 
     // Подключаем события для работы с задачами
     document.getElementById('add-task-button').addEventListener('click', () => ModalManager.toggleModal('taskModal'));

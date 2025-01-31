@@ -46,9 +46,24 @@ services:
     depends_on:
       - kafka
       - mysql
-    command: ["wait-for-it", "mysql:3306", "--", "java", "-jar", "app.jar"]
     environment:
       SPRING_PROFILES_ACTIVE: docker
+
+  frontend:
+    build:
+      context: ./task-tracker-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+  scheduler:
+    build:
+      context: ./task-tracker-scheduler
+
+  email-sender:
+    build:
+      context: ./task-tracker-email-sender
 
 volumes:
   mysql_data:

@@ -16,4 +16,3 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     Slice<Task> findByUser(User user, Pageable pageable);
 }
-//Audited

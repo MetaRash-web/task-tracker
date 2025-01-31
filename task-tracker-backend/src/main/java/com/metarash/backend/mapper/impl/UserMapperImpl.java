@@ -14,7 +14,6 @@ public class UserMapperImpl implements UserMapper {
         return new UserDto(user.getId(), user.getUsername(), user.getEmail(), user.getPassword());
     }
 
-    // Преобразование из UserDto в User
     public User toEntity(UserDto userDto) {
         if (userDto == null) {
             return null;

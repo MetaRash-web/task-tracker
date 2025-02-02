@@ -1,5 +1,6 @@
 package com.metarash.backend.controller;
 
+import com.metarash.backend.dto.EmailDto;
 import com.metarash.backend.producer.EmailProducer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +14,8 @@ public class SendEmailController {
     private final EmailProducer emailProducer;
 
     @PostMapping("/send")
-    public ResponseEntity<String> sendEmail(@RequestBody String message) {
-        System.out.println("post request: " + message);
-        emailProducer.sendEmailMessage(message);
+    public ResponseEntity<String> sendEmail(@RequestBody EmailDto emailDto) {
+        emailProducer.sendEmailMessage(emailDto);
         return ResponseEntity.ok("Message sent to Kafka");
     }
 

@@ -1,11 +1,18 @@
 import 'react';
+import { useState } from "react";
+import "./MainContent.css";
+import TaskList from "./task/TaskList.jsx"
+import FilterModal from "./filter/FilterModal.jsx"
+import Topbar from "./topbar/Topbar.jsx";
 
-function MainContent() {
+export default function MainContent() {
+
     return (
-        <main id="main-content">
-            <p>Здесь будет содержимое task-list.html</p>
-        </main>
+        <div className="main-content">
+            <Topbar />
+            <div className="content">
+                <TaskList />
+            </div>
+        </div>
     );
 }
-
-export default MainContent;

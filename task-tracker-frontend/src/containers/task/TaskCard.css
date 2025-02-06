@@ -1,0 +1,41 @@
+.task-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+.task-card:hover {
+    transform: translateY(-5px);
+}
+
+.priority {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.priority.высокий {
+    background: #ff4d4d;
+    color: white;
+}
+
+.priority.средний {
+    background: #ffcc00;
+    color: black;
+}
+
+.priority.низкий {
+    background: #66cc66;
+    color: white;
+}
+
+.status {
+    display: block;
+    margin-top: 10px;
+    font-size: 14px;
+    color: gray;
+}

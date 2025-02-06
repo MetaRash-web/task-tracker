@@ -1,0 +1,20 @@
+.dropdown-btn {
+    display: flex;
+    align-items: center;
+    width: 120px;
+    padding: 0.4rem;
+    background-color: #ffffff;
+    border-radius: 0.3rem;
+    border: 1px solid #e8e8e8;
+    cursor: pointer;
+}
+
+.toggle-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto; /* Отодвигает стрелку вправо */
+    opacity: 0.6; /* Делаем более прозрачной */
+    font-size: 0.8rem; /* Уменьшаем размер */
+    transition: opacity 0.2s ease-in-out;
+}

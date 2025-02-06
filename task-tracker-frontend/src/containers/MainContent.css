@@ -1,0 +1,42 @@
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #fafafa;
+    height: 100vh;
+}
+
+.top-bar {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    background: #fafafa;
+    position: relative;
+}
+
+.filter-button {
+    position: fixed;
+    right: 10px;
+    top: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #676767;
+    margin-right: 12px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.filter-button:hover {
+    color: #222; /* Затемнение при наведении */
+}
+
+.filter-button.active {
+    transform: rotate(90deg); /* Анимация при нажатии */
+}
+
+.content {
+    padding: 20px;
+    overflow-y: auto;
+    flex: 1;
+}

@@ -1,0 +1,26 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #a3cd8b;
+    color: #333333;
+    padding: 10px 20px;
+}
+
+.container {
+    display: flex;
+}
+
+#sidebar {
+    width: 250px;
+    background-color: #009f75;
+    padding: 20px;
+}
+
+#main-content {
+    flex: 1;
+    padding: 20px;
+}

@@ -1,11 +1,13 @@
 package com.metarash.backend.security.jwt;
 
+import com.metarash.backend.config.JwtProperties;
 import com.metarash.backend.dto.JwtAuthenticationDto;
 import com.metarash.backend.utils.DurationUtils;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -16,9 +18,9 @@ import java.time.ZoneId;
 import java.util.Date;
 
 @Component
+@RequiredArgsConstructor
 public class JwtService {
-    @Value("${jwt.secret}")
-    private String jwtSecret;
+    private final JwtProperties properties;
 
     @Value("${jwt.access-token-expiration}")
     private String accessTokenExpiration;
@@ -30,7 +32,7 @@ public class JwtService {
 
     @PostConstruct
     private void init() {
-        byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
+        byte[] keyBytes = Decoders.BASE64.decode(properties.getSecret());
         this.secretKey = Keys.hmacShaKeyFor(keyBytes);
     }
 

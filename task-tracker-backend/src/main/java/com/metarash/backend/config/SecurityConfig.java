@@ -38,6 +38,7 @@ public class SecurityConfig {
                         .requestMatchers("/user", "/auth/login", "/auth/refresh").permitAll()
                         .requestMatchers(HttpMethod.PATCH, "/users/**").authenticated()
                         .requestMatchers("/actuator/**").permitAll()
+                        .requestMatchers("/ws/**").permitAll()
                         .requestMatchers("/**").authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

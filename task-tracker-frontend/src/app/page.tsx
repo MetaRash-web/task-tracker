@@ -43,6 +43,8 @@ export default function Home() {
         return { onAddTask: handleAddTask };
       case "EditTaskModal":
         return activeModal.props;
+      case "NotificationsModal":
+        return activeModal.props;
       case "AccountModal":
         return { 
           initialUserData: { 

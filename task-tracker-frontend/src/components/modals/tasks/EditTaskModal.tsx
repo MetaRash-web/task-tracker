@@ -37,9 +37,11 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({ task, onClose, onSave }) 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    
+
     const dataToSend: TaskForBackend = {
       ...formData,
-      createdAt: formatForBackend(formData.createdAt),
+      createdAt: formatForBackend(formData.createdAt as string | Date | null | undefined),
       dueDate: formatForBackend(formData.dueDate),
       completedAt: formatForBackend(formData.completedAt),
     };

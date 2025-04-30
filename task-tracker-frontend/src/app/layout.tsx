@@ -4,6 +4,8 @@ import "./globals.css";
 import { AuthProvider } from "@/features/auth/AuthProvider";
 import { Toaster } from 'react-hot-toast';
 import { TasksProvider } from "@/features/tasks/TasksProvider";
+import { useNotificationSocket } from "@/features/websocket/hooks/useNotificationSocket";
+import { NotificationProvider } from "@/features/websocket/NotificationProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,10 +32,10 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
       <TasksProvider>
         <AuthProvider>
-          <Toaster position="top-right" />
-            <div className="flex h-screen">
-              {children}
-            </div>
+          <NotificationProvider>
+            <Toaster position="top-right" />
+            {children}
+          </NotificationProvider>
         </AuthProvider>
       </TasksProvider>
       </body>

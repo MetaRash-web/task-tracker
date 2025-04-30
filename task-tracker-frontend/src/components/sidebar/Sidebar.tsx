@@ -9,7 +9,7 @@ const Sidebar = ({ onOpenModal }: SidebarProps) => {
     { icon: "taskList", path: "/" },
     { icon: "plus", fileName: "AddTaskModal" },
     { icon: "settings", fileName: "SettingsModal" },
-    { icon: "ring", path: "/notifications" },
+    { icon: "ring", fileName: "NotificationsModal" },
     { icon: "profile", fileName: "AccountModal" },
   ];
 

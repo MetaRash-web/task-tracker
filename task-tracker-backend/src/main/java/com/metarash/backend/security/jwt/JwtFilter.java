@@ -7,6 +7,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,6 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
@@ -30,25 +32,37 @@ public class JwtFilter extends OncePerRequestFilter {
         String token = getTokenFromRequest(request);
         String requestURI = request.getRequestURI();
         if (requestURI.equals("/auth/refresh")) {
+            log.info("Refresh token request, bypassing JWT validation");
             filterChain.doFilter(request, response);
             return;
         }
 
-        if (token != null && jwtService.validateJwtToken(token)) {
-            setCustomUserDetailsToSecurityContextHolder(token);
+        if (token != null) {
+            log.info("Processing request with token: {}", token);
+            if (jwtService.validateJwtToken(token)) {
+                log.info("Valid JWT token found, setting user details in SecurityContextHolder");
+                setCustomUserDetailsToSecurityContextHolder(token);
+            } else {
+                log.warn("Invalid JWT token: {}", token);
+            }
+        } else {
+            log.warn("No JWT token found in request");
         }
+
         filterChain.doFilter(request, response);
     }
 
     private void setCustomUserDetailsToSecurityContextHolder(String token) {
+
         String email = jwtService.getEmailFromToken(token);
         try {
+            log.info("Loading user details for email: {}", email);
             CustomUserDetails customUserDetails = customUserService.loadUserByUsername(email);
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                     customUserDetails, null, customUserDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Error loading user details for token: {}", token, e);
         }
     }
 

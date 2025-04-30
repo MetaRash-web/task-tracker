@@ -17,7 +17,7 @@ export const AccountModal = ({ onClose }: AccountModalProps) => {
   
   const handleUpdate = async (data: { username?: string; email?: string; telegram?: string }) => {
     try {
-      updateUser(user.id, data);
+      updateUser(user!.id!, data);
       toast.success("Данные обновлены!");
       onClose();
     } catch (error) {
@@ -27,7 +27,7 @@ export const AccountModal = ({ onClose }: AccountModalProps) => {
 
   const handleDelete = async () => {
     if (confirm("Удалить аккаунт безвозвратно?")) {
-      deleteUser(user.id);
+      deleteUser(user!.id!);
       onClose();
     }
   };

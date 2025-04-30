@@ -1,8 +1,8 @@
 package com.metarash.backend.mapper.impl;
 
-import com.metarash.backend.dto.UserDto;
-import com.metarash.backend.dto.UserRegistrationDto;
-import com.metarash.backend.entity.User;
+import com.metarash.backend.model.dto.UserDto;
+import com.metarash.backend.model.dto.UserRegistrationDto;
+import com.metarash.backend.model.entity.User;
 import com.metarash.backend.mapper.UserMapper;
 import org.springframework.stereotype.Component;
 
@@ -59,5 +59,23 @@ public class UserMapperImpl implements UserMapper {
         user.setEnabled(true);
 
         return user;
+    }
+
+    @Override
+    public void updateUserFromDto(User user, UserDto dto) {
+        if (dto == null) {
+            return;
+        }
+
+        if (dto.getEmail() != null) {
+            user.setEmail(dto.getEmail());
+        }
+        if (dto.getUsername() != null) {
+            user.setUsername(dto.getUsername());
+        }
+        if (dto.getTelegram() != null) {
+            user.setTelegram(dto.getTelegram());
+        }
+        // Пароль обрабатывается отдельно в сервисе
     }
 }

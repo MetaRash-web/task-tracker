@@ -1,8 +1,9 @@
 package com.metarash.tasktrackerscheduler.service;
 
-import com.metarash.tasktrackerscheduler.dto.ReportDto;
-import com.metarash.tasktrackerscheduler.entity.Task;
+import com.metarash.dto.ReportDto;
+import com.metarash.dto.TaskDto;
 import com.metarash.tasktrackerscheduler.entity.User;
+import com.metarash.tasktrackerscheduler.mapper.TaskMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,12 +13,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReportService {
 
-    private final TaskService taskRepository;
+    private final TaskService taskService;
+    private final TaskMapper taskMapper;
 
     public ReportDto generateDayReport(User user) {
-        List<Task> allTasks = taskRepository.getAllByUser(user);
-        List<Task> finishedTasks = taskRepository.getFinishedTasksByUser(user);
-        List<Task> unfinishedTasks = taskRepository.getUnfinishedTasksByUser(user);
+        List<TaskDto> unfinishedTasks = taskService.getUnfinishedTasksByUser(user).stream()
+                .map(taskMapper::toDto)
+                .toList();
+        List<TaskDto> allTasks = taskService.getAllByUser(user).stream()
+                .map(taskMapper::toDto)
+                .toList();
+        List<TaskDto> finishedTasks = taskService.getFinishedTasksByUser(user).stream()
+                .map(taskMapper::toDto)
+                .toList();
 
         ReportDto dayReport = new ReportDto();
         dayReport.setEmail(user.getEmail());
@@ -37,7 +45,7 @@ public class ReportService {
         return dayReport;
     }
 
-    private void buildAllTaskTasks(ReportDto dayReport, List<Task> finishedTasks, List<Task> unfinishedTasks) {
+    private void buildAllTaskTasks(ReportDto dayReport, List<TaskDto> finishedTasks, List<TaskDto> unfinishedTasks) {
         dayReport.setFinishedCount(finishedTasks.size());
         dayReport.setUnfinishedCount(unfinishedTasks.size());
 
@@ -45,12 +53,12 @@ public class ReportService {
         dayReport.setUnfinishedTasks(unfinishedTasks.size() > 5 ? unfinishedTasks.subList(0, 5) : unfinishedTasks);
     }
 
-    private void buildUnfinishedTasks(ReportDto dayReport, List<Task> unfinishedTasks) {
+    private void buildUnfinishedTasks(ReportDto dayReport, List<TaskDto> unfinishedTasks) {
         dayReport.setUnfinishedCount(unfinishedTasks.size());
         dayReport.setUnfinishedTasks(unfinishedTasks.size() > 5 ? unfinishedTasks.subList(0, 5) : unfinishedTasks);
     }
 
-    private void buildFinishedTasks(ReportDto dayReport, List<Task> finishedTasks) {
+    private void buildFinishedTasks(ReportDto dayReport, List<TaskDto> finishedTasks) {
         dayReport.setFinishedCount(finishedTasks.size());
         dayReport.setFinishedTasks(finishedTasks.size() > 5 ? finishedTasks.subList(0, 5) : finishedTasks);
     }

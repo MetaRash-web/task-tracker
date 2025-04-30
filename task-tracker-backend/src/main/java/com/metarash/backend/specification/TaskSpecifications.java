@@ -1,7 +1,7 @@
 package com.metarash.backend.specification;
 
-import com.metarash.backend.dto.TaskFilter;
-import com.metarash.backend.entity.Task;
+import com.metarash.backend.model.dto.TaskFilter;
+import com.metarash.backend.model.entity.Task;
 import org.springframework.data.jpa.domain.Specification;
 
 public class TaskSpecifications {

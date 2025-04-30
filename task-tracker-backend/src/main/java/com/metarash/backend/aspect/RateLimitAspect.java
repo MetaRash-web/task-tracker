@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.server.ResponseStatusException;
@@ -28,7 +29,7 @@ public class RateLimitAspect {
     @Around("@annotation(rateLimit)")
     public Object rateLimitCheck(ProceedingJoinPoint joinPoint, RateLimit rateLimit) throws Throwable {
         String key = resolveKey(rateLimit.key());
-        Bucket bucket = proxyManager.builder().build(key, bucketConfiguration);
+        Bucket bucket = proxyManager.builder().build(key, () -> bucketConfiguration);
 
         if (bucket.tryConsume(1)) {
             return joinPoint.proceed();
@@ -38,8 +39,11 @@ public class RateLimitAspect {
     }
 
     private String resolveKey(String keyType) {
-        HttpServletRequest request =
-                ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        RequestAttributes attrs = RequestContextHolder.getRequestAttributes();
+        if (!(attrs instanceof ServletRequestAttributes servletRequestAttributes)) {
+            return "global";
+        }
+        HttpServletRequest request = servletRequestAttributes.getRequest();
 
         return switch (keyType.toLowerCase()) {
             case "ip" -> request.getRemoteAddr();

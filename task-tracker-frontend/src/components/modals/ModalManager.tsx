@@ -5,6 +5,7 @@ import AddTaskModal from "./tasks/AddTaskModal";
 import EditTaskModal from "./tasks/EditTaskModal";
 import SettingsModal from "./settings-modal/SettingsModal";
 import AccountModal from "./account-modal/AccountModal";
+import NotificationsModal from "./notifications-modal/NotificationsModal";
 import { AnimatePresence, motion } from "framer-motion";
 
 interface ModalManagerProps<T extends ModalType> {
@@ -44,6 +45,12 @@ export const ModalManager = <T extends ModalType>({
         {...(modalProps as ModalPropsMap["AccountModal"])}
       />
     ),
+    NotificationsModal: (
+      <NotificationsModal
+      onClose={onClose}
+        {...(modalProps as ModalPropsMap["NotificationsModal"])}
+      />
+    )
   };
 
   return (

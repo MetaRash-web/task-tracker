@@ -1,7 +1,7 @@
 package com.metarash.backend.mapper;
 
-import com.metarash.backend.dto.TaskDto;
-import com.metarash.backend.entity.Task;
+import com.metarash.dto.TaskDto;
+import com.metarash.backend.model.entity.Task;
 
 public interface TaskMapper {
 

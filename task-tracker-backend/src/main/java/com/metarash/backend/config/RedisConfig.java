@@ -11,9 +11,12 @@ import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.command.CommandAsyncExecutor;
 import org.redisson.command.CommandAsyncService;
+import org.redisson.config.Config;
 import org.redisson.liveobject.core.RedissonObjectBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+
 import java.time.Duration;
 
 
@@ -21,8 +24,17 @@ import java.time.Duration;
 public class RedisConfig {
 
     @Bean
+    @Profile("local")
     public RedissonClient redissonClient() {
         return Redisson.create();
+    }
+
+    @Bean
+    @Profile("docker")
+    public RedissonClient dockerRedissonClient() {
+        Config config = new Config();
+        config.useSingleServer().setAddress("redis://redis:6379");
+        return Redisson.create(config);
     }
 
     @Bean

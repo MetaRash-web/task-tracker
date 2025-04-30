@@ -1,13 +1,14 @@
 package com.metarash.backend.security.jwt;
 
 import com.metarash.backend.config.JwtProperties;
-import com.metarash.backend.dto.JwtAuthenticationDto;
+import com.metarash.backend.model.dto.JwtAuthenticationDto;
 import com.metarash.backend.utils.DurationUtils;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtService {
@@ -82,6 +84,7 @@ public class JwtService {
         return Jwts.builder()
                 .subject(email)
                 .expiration(date)
+                .claim("token_type", durationStr.equals(refreshTokenExpiration) ? "refresh" : "access")
                 .signWith(getSignInKey())
                 .compact();
     }
@@ -92,5 +95,31 @@ public class JwtService {
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
+    }
+
+    public boolean isValidRefreshToken(String refreshToken) {
+        if (refreshToken == null || refreshToken.isBlank()) {
+            return false;
+        }
+
+        try {
+            Claims claims = parseToken(refreshToken);
+
+            Date expiration = claims.getExpiration();
+            if (expiration.before(new Date())) {
+                return false;
+            }
+
+            String tokenType = claims.get("token_type", String.class);
+            if (!"refresh".equals(tokenType)) {
+                return false;
+            }
+
+            String email = claims.getSubject();
+            return email != null && !email.isBlank();
+        } catch (JwtException | IllegalArgumentException e) {
+            log.warn("Invalid refresh token: {}", e.getMessage());
+            return false;
+        }
     }
 }

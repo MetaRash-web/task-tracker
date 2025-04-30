@@ -78,7 +78,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onClick, onDelete }) => {
         
         <div className="flex items-center gap-1">
           <span>🕒</span>
-          <span>Создана: {formatTaskDate(task.createdAt)}</span>
+          <span>Создана: {formatTaskDate(task.createdAt as string | Date | null | undefined)}</span>
         </div>
       </div>
     </div>

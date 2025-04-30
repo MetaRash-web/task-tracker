@@ -1,7 +1,7 @@
 package com.metarash.backend.utils;
 
-import com.metarash.backend.dto.JwtAuthenticationDto;
-import com.metarash.backend.dto.UserDto;
+import com.metarash.backend.model.dto.JwtAuthenticationDto;
+import com.metarash.backend.model.dto.UserDto;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Collections;

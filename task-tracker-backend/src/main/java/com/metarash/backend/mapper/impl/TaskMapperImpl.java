@@ -1,8 +1,8 @@
 package com.metarash.backend.mapper.impl;
 
-import com.metarash.backend.dto.TaskDto;
-import com.metarash.backend.entity.Task;
-import com.metarash.backend.entity.User;
+import com.metarash.dto.TaskDto;
+import com.metarash.backend.model.entity.Task;
+import com.metarash.backend.model.entity.User;
 import com.metarash.backend.mapper.TaskMapper;
 import com.metarash.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -46,10 +46,8 @@ public class TaskMapperImpl implements TaskMapper {
         task.setPriority(taskDto.getPriority());
 
         if (taskDto.getUsername() != null) {
-            User user = userService.findUserByUsername(taskDto.getUsername());
-            if (user == null) {
-                throw new IllegalArgumentException("User not found with username: " + taskDto.getUsername());
-            }
+            User user = userService.findUserByUsername(taskDto.getUsername())
+                    .orElseThrow(() -> new IllegalArgumentException("User not found with username: " + taskDto.getUsername()));
             task.setUser(user);
         }
 

@@ -1,16 +1,12 @@
 package com.metarash.emailsender.config;
 
-import com.metarash.emailsender.dto.EmailDto;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.NewTopic;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.core.KafkaAdmin;
-import org.springframework.kafka.support.serializer.JsonSerializer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +26,34 @@ public class KafkaConfig {
     }
 
     @Bean
-    public NewTopic createTopic() {
-        return new NewTopic("EMAIL_SENDING_TASKS", 1, (short) 1);
+    public NewTopic emailSendingTopic(@Value("${kafka.topics.email-sending.name}") String name,
+                                      @Value("${kafka.topics.email-sending.partitions}") int partitions,
+                                      @Value("${kafka.topics.email-sending.replicas}") short replicas
+    ) {
+        return new NewTopic(name, partitions, replicas);
+    }
+
+    @Bean
+    public NewTopic allTasksTopic(@Value("${kafka.topics.all-tasks.name}") String name,
+                                  @Value("${kafka.topics.all-tasks.partitions}") int partitions,
+                                  @Value("${kafka.topics.all-tasks.replicas}") short replicas
+    ) {
+        return new NewTopic(name, partitions, replicas);
+    }
+
+    @Bean
+    public NewTopic unfinishedTasksTopic(@Value("${kafka.topics.unfinished-tasks.name}") String name,
+                                         @Value("${kafka.topics.unfinished-tasks.partitions}") int partitions,
+                                         @Value("${kafka.topics.unfinished-tasks.replicas}") short replicas
+    ) {
+        return new NewTopic(name, partitions, replicas);
+    }
+
+    @Bean
+    public NewTopic finishedTasksTopic(@Value("${kafka.topics.finished-tasks.name}") String name,
+                                       @Value("${kafka.topics.finished-tasks.partitions}") int partitions,
+                                       @Value("${kafka.topics.finished-tasks.replicas}") short replicas
+    ) {
+        return new NewTopic(name, partitions, replicas);
     }
 }

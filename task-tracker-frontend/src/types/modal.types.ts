@@ -4,7 +4,8 @@ export type ModalType =
   | "AddTaskModal"
   | "EditTaskModal"
   | "SettingsModal"
-  | "AccountModal";
+  | "AccountModal"
+  | "NotificationsModal";
 
 export type ModalPropsMap = {
   AddTaskModal: {
@@ -21,5 +22,7 @@ export type ModalPropsMap = {
     };
   };
   AccountModal: {
+  };
+  NotificationsModal: {
   };
 };

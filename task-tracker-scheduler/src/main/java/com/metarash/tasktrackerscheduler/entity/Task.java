@@ -1,11 +1,9 @@
 package com.metarash.tasktrackerscheduler.entity;
 
-import com.metarash.tasktrackerscheduler.model.TaskStatus;
+import com.metarash.model.TaskPriority;
+import com.metarash.model.TaskStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -41,8 +39,15 @@ public class Task {
     @Column(name = "completed_at")
     private LocalDateTime completedAt;
 
+    @Column(name = "notification_sent")
+    private LocalDateTime notificationSent;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     @ToString.Exclude
     private User user;
+
+    @Column(name = "priority", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private TaskPriority priority;
 }

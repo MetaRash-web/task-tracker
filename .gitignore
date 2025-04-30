@@ -37,3 +37,4 @@ mysql_data
 
 ### YAML Files ###
 *.yml
+node_modules

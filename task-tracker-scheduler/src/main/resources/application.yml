@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: scheduler
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+  kafka:
+    producer:
+      bootstrap-servers: ${KAFKA_BROKER}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+  datasource:
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${db.username}
+    password: ${db.password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  flyway:
+    enabled: true
+  cloud:
+    vault:
+      uri: ${VAULT_URI}
+      token: ${VAULT_TOKEN}
+      authentication: token
+      kv:
+        enabled: true
+  config:
+    import: vault://secret/shared, vault://
+
+kafka:
+  bootstrap-servers: ${KAFKA_BROKER}

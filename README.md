@@ -69,7 +69,7 @@ docker-compose up --build
 
 ## 🔗 API & WebSocket Usage
 
-- **REST API**: See `TaskController`, `AuthController`, etc. for endpoint structure.
+- **REST API**: See `KafkaBackendListener`. for endpoint structure.
 - **WebSocket**: Connect to `/ws`, subscribe to `/user/queue/notifications` for real-time updates.
 
 ---

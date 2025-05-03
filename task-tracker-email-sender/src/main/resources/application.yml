@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: email-sender
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${mail.username}
+    password: ${mail.password}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.debug: true
+  kafka:
+    consumer:
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: ${TRUSTED_KAFKA_PACKAGES}
+    bootstrap-servers: ${KAFKA_BROKER}
+  cloud:
+    vault:
+      uri: ${VAULT_URI}
+      token: ${VAULT_TOKEN}
+      authentication: token
+      kv:
+        enabled: true
+  config:
+    import: vault://
+
+kafka:
+  topics:
+    email-sending:
+      name: email-sending-tasks
+      partitions: 3
+      replicas: 2
+    all-tasks:
+      name: all-tasks-topic
+      partitions: 3
+      replicas: 2
+    unfinished-tasks:
+      name: unfinished-tasks-topic
+      partitions: 1
+      replicas: 1
+    finished-tasks:
+      name: finished-tasks-topic
+      partitions: 1
+      replicas: 1

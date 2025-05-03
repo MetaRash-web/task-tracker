@@ -1,0 +1,68 @@
+spring:
+  application:
+    name: backend
+  datasource:
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${db.username}
+    password: ${db.password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      idle-timeout: 60000
+      connection-timeout: 5000
+      max-lifetime: 900000
+      minimum-idle: 2
+      maximum-pool-size: 10
+
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+
+  cloud:
+    vault:
+      uri: ${VAULT_URI}
+      token: ${VAULT_TOKEN}
+      authentication: token
+      kv:
+        enabled: true
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+  flyway:
+    enabled: true
+  config:
+    import: vault://secret/shared, vault://
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,hikaricp
+
+kafka:
+  bootstrap-servers: ${KAFKA_BROKER}
+
+jwt:
+  access-token-expiration: 15m
+  refresh-token-expiration: 7d
+
+cors:
+  allowed-origins: "http://frontend,http://bruno,http://localhost"
+
+server:
+  error:
+    include-stacktrace: always
+
+logging:
+  level:
+    org:
+      springframework:
+        web:
+          cors: DEBUG
+        cloud:
+          vault: DEBUG
+        vault: DEBUG

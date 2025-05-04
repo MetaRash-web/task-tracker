@@ -19,7 +19,7 @@ export const TaskService = {
   },
 
   async updateTask(taskData: Partial<Task>): Promise<Task> {
-    const data = await apiClient.put<Task>(`/tasks/${taskData.id}`, taskData);
+    const data = await apiClient.patch<Task>(`/tasks/${taskData.id}`, taskData);
     return data;
   },
 

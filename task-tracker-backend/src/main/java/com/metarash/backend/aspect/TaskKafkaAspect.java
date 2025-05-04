@@ -30,7 +30,7 @@ public class TaskKafkaAspect {
     }
 
     @AfterReturning(
-            pointcut = "execution(* com.metarash.backend.service.impl.TaskServiceImpl.updateTask(..))",
+            pointcut = "execution(* com.metarash.backend.service.impl.TaskServiceImpl.patchTask(..))",
             returning = "result"
     )
     public void afterTaskUpdated(TaskDto result) {

@@ -22,11 +22,14 @@ public class OverdueNotificationListener {
     public void onOverdueNotification(NotificationMessage msg) {
         log.info("getting overdue notification: {}", msg);
         try {
-            log.info("Sending to user: {}, destination: {}", msg.getUserEmail(), "/topic/notifications");
-            simpMessagingTemplate.convertAndSend("/topic/notifications", msg);
+            log.info("Sending overdue tasks notification to user: {}", msg.getUserEmail());
+            simpMessagingTemplate.convertAndSendToUser(
+                    msg.getUserEmail(),
+                    "/topic/notifications",
+                    msg
+            );
         } catch (Exception e) {
             log.error(e.getMessage());
         }
     }
 }
-

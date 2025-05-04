@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 
 @Slf4j
 @RestController
@@ -42,15 +44,13 @@ public class TaskController {
                 .body(createdTask);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<?> updateTask(@PathVariable Long id,
-                                        @RequestBody TaskDto taskDto,
+                                        @RequestBody Map<String, Object> updates,
                                         Authentication authentication) {
         String username = authentication.getName();
-        taskDto.setId(id);
-        taskDto.setUsername(username);
-        log.info("PUT /tasks/{} — user: {}, newData: {}", id, username, taskDto);
-        TaskDto updatedTask = taskService.updateTask(taskDto);
+        log.info("PATCH /tasks/{} — user: {}, newData: {}", id, username, updates);
+        TaskDto updatedTask = taskService.patchTask(id, updates, username);
         log.debug("Task updated: {}", updatedTask);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(updatedTask);

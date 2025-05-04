@@ -1,5 +1,6 @@
 package com.metarash.backend.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.metarash.dto.TaskDto;
 import com.metarash.backend.model.dto.TaskFilter;
 import com.metarash.backend.model.entity.Task;
@@ -19,6 +20,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -26,6 +29,7 @@ import org.springframework.stereotype.Service;
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
+    private final ObjectMapper objectMapper;
 
     @Override
     public Slice<TaskDto> getTasksByUsername(String username, TaskFilter filter) {
@@ -54,18 +58,15 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskDto updateTask(TaskDto taskDto) {
-        log.info("Updating task with id: {}", taskDto.getId());
-        Task existingTask = taskRepository.findById(taskDto.getId())
-                .orElseThrow(() -> {
-                    log.error("Task not found with id: {}", taskDto.getId());
-                    return new EntityNotFoundException("Task not found with id: " + taskDto.getId());
-                });
+    public TaskDto patchTask(Long id, Map<String, Object> updates, String username) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Task not found with id: " + id));
+        log.info("Updates: {}", updates);
+        TaskDto patchDto = objectMapper.convertValue(updates, TaskDto.class);
+        Task patchedTask  = ObjectUtils.copyNonNullProperties(task, taskMapper.toEntity(patchDto), "id", "createdAt");
 
-        Task updatedTask = ObjectUtils.copyNonNullProperties(existingTask, taskMapper.toEntity(taskDto), "id", "createdAt");
-
-        TaskDto result = taskMapper.toDto(taskRepository.save(updatedTask));
-        log.info("Task updated successfully: {}", result);
+        TaskDto result = taskMapper.toDto(taskRepository.save(patchedTask));
+        log.info("Task patched: {}", result);
         return result;
     }
 

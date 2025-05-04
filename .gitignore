@@ -38,3 +38,5 @@ mysql_data
 node_modules
 vault-init/init.sh
 Docker-compose.yml
+package.json
+package-lock.json

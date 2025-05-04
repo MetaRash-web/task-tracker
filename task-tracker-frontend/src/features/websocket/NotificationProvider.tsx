@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, createContext, useContext, useState } from 'react';
+import { ReactNode, createContext, useContext } from 'react';
 import { useNotificationSocket } from './hooks/useNotificationSocket';
 import { NotificationMessage } from '@/types/notification.types';
 

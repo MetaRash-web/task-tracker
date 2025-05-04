@@ -50,4 +50,7 @@ public class Task {
     @Column(name = "priority", nullable = false)
     @Enumerated(EnumType.STRING)
     private TaskPriority priority;
+
+    @Column(name = "notification_sent")
+    private LocalDateTime notificationSent;
 }

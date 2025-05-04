@@ -2,7 +2,7 @@ import { TaskPriority, TaskStatus } from "@/lib/constants/task.constants";
 
     export interface Task {
     id: number;
-    title: string;
+    title?: string;
     description?: string;
     status: TaskStatus;
     priority: TaskPriority;
@@ -10,6 +10,7 @@ import { TaskPriority, TaskStatus } from "@/lib/constants/task.constants";
     dueDate?: string | Date | null;
     completedAt?: string | Date | null;
     username?: string;
+    notification_sent?: string | Date | null;
   }
   export interface PaginatedResponse<T> {
     first: boolean;

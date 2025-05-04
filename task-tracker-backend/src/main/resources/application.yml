@@ -57,6 +57,9 @@ server:
   error:
     include-stacktrace: always
 
+cache:
+  ttl-minutes: 10
+
 logging:
   level:
     org:

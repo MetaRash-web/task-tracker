@@ -4,8 +4,10 @@ import com.metarash.backend.model.dto.UserDto;
 import com.metarash.backend.model.dto.UserRegistrationDto;
 import com.metarash.backend.model.entity.User;
 import com.metarash.backend.mapper.UserMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class UserMapperImpl implements UserMapper {
 
@@ -15,13 +17,14 @@ public class UserMapperImpl implements UserMapper {
             return null;
         }
 
-        return UserDto.builder()
+        UserDto userDto = UserDto.builder()
                 .id(user.getId())
                 .username(user.getUsername())
                 .email(user.getEmail())
                 .telegram(user.getTelegram())
-                .password(null)
                 .build();
+
+        return userDto;
     }
 
     @Override

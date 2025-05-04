@@ -4,7 +4,7 @@ import java.time.DateTimeException;
 import java.time.Duration;
 
 public final class DurationUtils {
-    public static final Duration parseDuration(String durationStr) {
+    public static Duration parseDuration(String durationStr) {
         if (durationStr == null || durationStr.isEmpty()) {
             return Duration.ofHours(1);
         }

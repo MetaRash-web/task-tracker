@@ -36,12 +36,12 @@ export const AuthService = {
     }) {
       console.log("update data: ", updateData);
       const data = await apiClient.patch<{ user: User }>(
-        `/users/${userId}`, updateData);
+        `/user/${userId}`, updateData);
       return data;
     },
   
     async deleteUser(userId: number) {
-      await apiClient.delete(`/users/${userId}`);
+      await apiClient.delete(`/user/${userId}`);
     },
   
     async logout() {

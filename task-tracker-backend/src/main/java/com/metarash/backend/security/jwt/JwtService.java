@@ -76,11 +76,13 @@ public class JwtService {
 
     private String generateToken(String email, String durationStr) {
         Duration duration = DurationUtils.parseDuration(durationStr);
+        log.info("trying to parse data and building token");
         Date date = Date.from(
                 LocalDateTime.now()
                         .plus(duration)
                         .atZone(ZoneId.systemDefault()).toInstant()
         );
+        log.info("building token with date: {}", date);
         return Jwts.builder()
                 .subject(email)
                 .expiration(date)

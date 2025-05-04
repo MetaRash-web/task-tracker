@@ -15,7 +15,7 @@ Task Tracker is an enterprise-grade, modular task management system designed wit
 - 🔗 **REST API**: RESTful endpoints, DTO mapping, error handling, and API versioning.
 - 🚦 **Rate Limiting**: Integrated with Redis and Bucket4j for API abuse prevention.
 - 🐳 **Containerization**: Dockerized deployment, multi-module Maven build, and Docker Compose orchestration.
-
+89
 ---
 
 ## 🛠️ Technology Stack

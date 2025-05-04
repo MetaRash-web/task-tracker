@@ -1,6 +1,7 @@
 package com.metarash.backend.service.impl;
 
 import com.metarash.backend.annotations.RateLimit;
+import com.metarash.backend.kafka.producer.EmailProducer;
 import com.metarash.backend.model.dto.*;
 import com.metarash.backend.model.entity.User;
 import com.metarash.backend.exceptionHandler.UserAlreadyExistsException;
@@ -9,10 +10,13 @@ import com.metarash.backend.repository.TaskRepository;
 import com.metarash.backend.repository.UserRepository;
 import com.metarash.backend.security.jwt.JwtService;
 import com.metarash.backend.service.UserService;
+import com.metarash.dto.EmailDto;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
@@ -34,6 +38,7 @@ public class UserServiceImpl implements UserService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
+    private final EmailProducer emailProducer;
 
     @Override
     @RateLimit(value = 10)
@@ -53,12 +58,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @RateLimit(value = 10)
+    @CacheEvict(value = "users", key = "#userRegistrationDto.email")
     public JwtAuthenticationDto register(UserRegistrationDto userRegistrationDto) {
         validateRegistrationData(userRegistrationDto);
 
         User user = userMapper.fromRegistrationDto(userRegistrationDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User savedUser = userRepository.save(user);
+        emailProducer.sendEmailMessage(createWelcomeEmail(savedUser));
 
         log.info("User registered successfully with ID: {}", savedUser.getId());
         return jwtService.generateAuthToken(savedUser.getEmail());
@@ -83,7 +90,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(value = "users", key = "#email")
     public UserDto getUserDtoByEmail(String email) {
+        log.info("getting user by email: {}", email);
         return userRepository.findByEmail(email)
                 .map(userMapper::toDto)
                 .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND_MSG));
@@ -161,6 +170,13 @@ public class UserServiceImpl implements UserService {
                 throw new UserAlreadyExistsException("Username already taken");
             }
         }
+    }
+
+    private EmailDto createWelcomeEmail(User user) {
+        String recipient = user.getEmail();
+        String subject = "Добро пожаловать!";
+        String text = "Привет, " + (user.getUsername() != null ? user.getUsername() : "пользователь") + "! Спасибо за регистрацию.";
+        return new EmailDto(recipient, subject, text);
     }
 
     private String maskEmail(String email) {

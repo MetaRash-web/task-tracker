@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
@@ -46,6 +46,7 @@ public class UserController {
             log.error("Access denied for user with email: {} trying to update user with id: {}", currentUserEmail, id);
             throw new AccessDeniedException("Cannot update another user");
         }
+
         log.info("Updating user with id: {} by user with email: {}", id, currentUserEmail);
         UserDto updatedUser = userService.updateUser(id, dto, authentication);
         log.info("User with id: {} updated successfully", id);

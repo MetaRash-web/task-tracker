@@ -1,7 +1,6 @@
 package com.metarash.backend.config;
 
 import io.github.bucket4j.Bandwidth;
-import io.github.bucket4j.Bucket;
 import io.github.bucket4j.BucketConfiguration;
 import io.github.bucket4j.distributed.ExpirationAfterWriteStrategy;
 import io.github.bucket4j.distributed.proxy.ProxyManager;
@@ -13,15 +12,16 @@ import org.redisson.command.CommandAsyncExecutor;
 import org.redisson.command.CommandAsyncService;
 import org.redisson.config.Config;
 import org.redisson.liveobject.core.RedissonObjectBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-
 import java.time.Duration;
-
 
 @Configuration
 public class RedisConfig {
+    @Value("${cache.ttl-minutes}")
+    private long cacheTtlMinutes;
 
     @Bean
     @Profile("local")
@@ -53,7 +53,7 @@ public class RedisConfig {
                 .builderFor(commandExecutor)
                 .withExpirationStrategy(
                         ExpirationAfterWriteStrategy
-                                .basedOnTimeForRefillingBucketUpToMax(Duration.ofMinutes(1))
+                                .basedOnTimeForRefillingBucketUpToMax(Duration.ofMinutes(cacheTtlMinutes))
                 )
                 .build();
     }
@@ -64,10 +64,4 @@ public class RedisConfig {
                 .addLimit(Bandwidth.simple(10, Duration.ofMinutes(1)))
                 .build();
     }
-
-    @Bean
-    public Bucket exampleBucket(ProxyManager<String> proxyManager, BucketConfiguration defaultBucketConfig) {
-        return proxyManager.builder().build("some-key", defaultBucketConfig);
-    }
 }
-

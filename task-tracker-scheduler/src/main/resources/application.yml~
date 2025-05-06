@@ -14,7 +14,7 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
   datasource:
-    url: jdbc:mysql://mysql:3306/task-tracker
+    url: jdbc:mysql://${DB_HOST}:3306/${DB_NAME}
     username: ${db.username}
     password: ${db.password}
     driver-class-name: com.mysql.cj.jdbc.Driver

@@ -1,0 +1,4 @@
+package com.metarash.tasktrackerscheduler.config;
+
+public class KafkaMockConfig {
+}

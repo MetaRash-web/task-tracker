@@ -21,13 +21,11 @@ public class OverdueNotificationListener {
     )
     public void onOverdueNotification(NotificationMessage msg) {
         log.info("getting overdue notification: {}", msg);
+        String targetPrincipal = msg.getUserEmail();
+        log.info("Target principal: {}", targetPrincipal);
         try {
             log.info("Sending overdue tasks notification to user: {}", msg.getUserEmail());
-            simpMessagingTemplate.convertAndSendToUser(
-                    msg.getUserEmail(),
-                    "/topic/notifications",
-                    msg
-            );
+            simpMessagingTemplate.convertAndSend("/topic/notifications." + targetPrincipal, msg);
         } catch (Exception e) {
             log.error(e.getMessage());
         }

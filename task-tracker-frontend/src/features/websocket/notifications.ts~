@@ -20,7 +20,7 @@ export const connectToNotifications = (
         onConnect: (frame: IFrame) => {
             console.log('[WebSocket] Connected! Username:', username);
             stompClient?.subscribe(
-                `/topic/notifications.${username}`,
+                `/user/topic/notifications`,
                 (message) => {
                     try {
                         const parsed = JSON.parse(message.body);

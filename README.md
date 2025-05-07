@@ -15,13 +15,13 @@ Task Tracker is an enterprise-grade, modular task management system designed wit
 - 🔗 **REST API**: RESTful endpoints, DTO mapping, error handling, and API versioning.
 - 🚦 **Rate Limiting**: Integrated with Redis and Bucket4j for API abuse prevention.
 - 🐳 **Containerization**: Dockerized deployment, multi-module Maven build, and Docker Compose orchestration.
-89
+
 ---
 
 ## 🛠️ Technology Stack
 
-- **Backend**: Java 17, Spring Boot, Spring Security, Spring Data JPA, Hibernate, Kafka, WebSocket (STOMP), Lombok, Spring Scheduling
-- **Frontend**: Next.js (React), TypeScript, STOMP.js, CSS
+- **Backend**: Java 17, Spring Boot, Spring Security, Hibernate, Kafka, WebSocket (STOMP), Spring Scheduling
+- **Frontend**: Next.js (React), TypeScript, STOMP.js, Sock.js, axios, CSS
 - **Microservices**: Spring Boot (Scheduler, Email Sender)
 - **Database**: MySQL
 - **Caching & Rate Limiting**: Redis, Bucket4j
@@ -59,18 +59,10 @@ make build
 docker-compose up --build
 ```
 
-### Manual Start
-- **Backend**: `cd task-tracker-backend && ./mvnw spring-boot:run`
-- **Frontend**: `cd task-tracker-frontend && npm install && npm run dev`
-- **Scheduler**: `cd task-tracker-scheduler && ./mvnw spring-boot:run`
-- **Email Sender**: `cd task-tracker-email-sender && ./mvnw spring-boot:run`
-
----
-
 ## 🔗 API & WebSocket Usage
 
-- **REST API**: See `KafkaBackendListener`. for endpoint structure.
-- **WebSocket**: Connect to `/ws`, subscribe to `/user/queue/notifications` for real-time updates.
+- **REST API**: See controllers folder
+- **WebSocket**: See `KafkaBackendListener`. for endpoint structure. Connect to `/ws`, subscribe to `/user/{username}/topic/notifications` for real-time updates.
 
 ---
 

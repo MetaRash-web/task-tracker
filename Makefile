@@ -7,6 +7,8 @@ build:
 	cd task-tracker-email-sender && mvn clean package -DskipTests
 	@echo "🛠️  Билдим scheduler..."
 	cd task-tracker-scheduler && mvn clean package -DskipTests
+	@echo "🚀 Запускаем сервисы..."
+	docker-compose up -d --build
 
 run:
 	@echo "🚀 Запускаем сервисы..."

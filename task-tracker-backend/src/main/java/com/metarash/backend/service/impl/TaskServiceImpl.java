@@ -44,7 +44,6 @@ public class TaskServiceImpl implements TaskService {
         Specification<Task> spec = TaskSpecifications.build(filter, username);
 
         Slice<TaskDto> tasks = taskRepository.findAll(spec, pageable).map(taskMapper::toDto);
-        log.debug("Found tasks: {}", tasks.getContent());
         return tasks;
     }
 

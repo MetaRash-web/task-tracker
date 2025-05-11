@@ -2,11 +2,11 @@
 
 build:
 	@echo "🛠️  Билдим backend..."
-	cd task-tracker-backend && mvn clean package -DskipTests
+	mvn clean package -pl task-tracker-backend -DskipTests
 	@echo "🛠️  Билдим email-сервис..."
-	cd task-tracker-email-sender && mvn clean package -DskipTests
+	mvn clean package -pl task-tracker-email-sender -DskipTests
 	@echo "🛠️  Билдим scheduler..."
-	cd task-tracker-scheduler && mvn clean package -DskipTests
+	mvn clean package -pl task-tracker-scheduler -DskipTests
 	@echo "🚀 Запускаем сервисы..."
 	docker-compose up -d --build
 
@@ -20,7 +20,7 @@ stop:
 
 backend:
 	docker-compose down backend
-	cd task-tracker-backend && mvn clean package -DskipTests && cd ..
+	mvn clean package -pl task-tracker-backend -am -DskipTests
 	docker-compose build backend
 
 scheduler:

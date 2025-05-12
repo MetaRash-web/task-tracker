@@ -1,0 +1,23 @@
+.git
+.idea
+.vscode
+node_modules
+target
+build
+*.log
+*.iml
+*.ipr
+*.iws
+.DS_Store
+mysql_data
+vault-init/init.sh
+nbproject
+nbbuild
+dist
+nbdist
+.nb-gradle
+
+# Можно добавить frontend-артефакты, если они не нужны для backend-сборки
+task-tracker-frontend/.next
+task-tracker-frontend/node_modules
+task-tracker-frontend/build

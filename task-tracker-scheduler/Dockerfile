@@ -2,7 +2,8 @@
 FROM maven:3.9.6-eclipse-temurin-22 AS build
 WORKDIR /app
 COPY .. .
-RUN mvn clean package -pl task-tracker-scheduler -am -DskipTests
+RUN mvn clean install -pl common -am -DskipTests
+RUN mvn clean package -pl task-tracker-scheduler -DskipTests
 
 # Stage 2: Minimal runtime image
 FROM eclipse-temurin:22-jre

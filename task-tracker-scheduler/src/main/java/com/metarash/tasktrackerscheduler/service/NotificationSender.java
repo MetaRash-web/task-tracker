@@ -30,7 +30,6 @@ public class NotificationSender {
                 log.info("Sent notification for task {}", taskId);
             } catch (Exception ex) {
                 log.error("Failed to send notification for task {}", taskId, ex);
-                // Здесь можно добавить повторную попытку
             }
         });
     }

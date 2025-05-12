@@ -1,7 +1,7 @@
 networks:
   default:
-    external:
-      name: task-tracker-network
+    name: task-tracker-network
+    driver: bridge
 
 services:
   zookeeper:
@@ -68,7 +68,8 @@ services:
 
   backend:
     build:
-      context: ./task-tracker-backend
+      context: .
+      dockerfile: task-tracker-backend/Dockerfile
     ports:
       - "8080:8080"
     env_file:
@@ -98,7 +99,8 @@ services:
 
   scheduler:
     build:
-      context: ./task-tracker-scheduler
+      context: .
+      dockerfile: task-tracker-scheduler/Dockerfile
     env_file:
       - .env.dev
     depends_on:
@@ -106,7 +108,8 @@ services:
 
   email-sender:
     build:
-      context: ./task-tracker-email-sender
+      context: .
+      dockerfile: task-tracker-email-sender/Dockerfile
     env_file:
       - .env.dev
     depends_on:

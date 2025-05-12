@@ -38,7 +38,7 @@ public class TaskServiceImpl implements TaskService {
             sort = Sort.by(Sort.Order.desc(filter.getSort()));
         }
 
-        log.debug("getTasksByUsername - username: {}, filter: {}", username, filter);
+        log.info("getting tasks by username - username: {}, filter: {}", username, filter);
 
         Pageable pageable = PageRequest.of(filter.getPage(), filter.getSize(), sort);
         Specification<Task> spec = TaskSpecifications.build(filter, username);

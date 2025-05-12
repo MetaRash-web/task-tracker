@@ -11,6 +11,10 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 @Slf4j
@@ -26,6 +30,8 @@ public class NotificationScheduler {
     private final ReentrantLock lock = new ReentrantLock();
 
     private final Timer timer = new Timer();
+    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    private ScheduledFuture<?> currentTask;
 
     public void scheduleNotification(TaskEvent event) {
         lock.lock();
@@ -47,7 +53,9 @@ public class NotificationScheduler {
     private void reschedule() {
         lock.lock();
         try {
-            timer.cancel();
+            if (currentTask != null) {
+                currentTask.cancel(false);
+            }
 
             ScheduledTask nextTask = queue.peek();
             if (nextTask == null) {
@@ -63,12 +71,10 @@ public class NotificationScheduler {
                 delay = 0;
             }
 
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    handleDueTask();
-                }
-            }, delay);
+            currentTask = scheduler.schedule(
+                this::handleDueTask,
+                delay,
+                TimeUnit.MILLISECONDS);
 
             log.info("Scheduled task {} for execution in {} ms", nextTask.taskId(), delay);
         } finally {

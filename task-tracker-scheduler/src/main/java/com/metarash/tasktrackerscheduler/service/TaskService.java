@@ -20,14 +20,10 @@ public class TaskService {
     }
 
     public List<Task> getFinishedTasksByUser(User user) {
-        return taskRepository.findByUser(user).stream()
-                .filter(task -> task.getStatus() == TaskStatus.completed)
-                .collect(Collectors.toList());
+        return taskRepository.findByUserAndStatus(user, TaskStatus.completed);
     }
 
     public List<Task> getUnfinishedTasksByUser(User user) {
-        return taskRepository.findByUser(user).stream()
-                .filter(task -> task.getStatus() != TaskStatus.completed)
-                .collect(Collectors.toList());
+        return taskRepository.findByUserAndStatusNot(user, TaskStatus.completed);
     }
 }

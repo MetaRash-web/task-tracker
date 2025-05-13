@@ -15,8 +15,6 @@ import java.util.Optional;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findByUser(User user);
-    @Query("SELECT MIN(t.dueDate) FROM Task t WHERE t.dueDate > :now AND t.status != 'completed' AND t.notificationSent IS NULL")
-    Optional<LocalDateTime> findNextDueDateAfterNow(@Param("now") LocalDateTime now);
-
-    List<Task> findAllByDueDateBeforeAndStatusNotAndNotificationSentIsNull(LocalDateTime dueDate, TaskStatus status);
+    List<Task> findByUserAndStatus(User user, TaskStatus status);
+    List<Task> findByUserAndStatusNot(User user, TaskStatus status);
 }
